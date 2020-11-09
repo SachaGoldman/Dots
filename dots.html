@@ -123,7 +123,7 @@
 			}
 
 			function updateMouse(event) {
-				let particleBase = new Particle(
+				const particleBase = new Particle(
 					ctx,
 					Math.floor(Math.random() * 6),
 					event.clientX,
@@ -134,7 +134,7 @@
 			}
 
 			function force(forced, forcing) {
-				let distance = Math.sqrt(
+				const distance = Math.sqrt(
 					(forced.x - forcing.x) ** 2 + (forced.y - forcing.y) ** 2
 				);
 				let force = 0;
@@ -212,7 +212,7 @@
 				particles = [];
 
 				for (let i = 0; i < (canvas.width * canvas.height) / 2300; i++) {
-					let particleBase = new Particle(
+					const particleBase = new Particle(
 						ctx,
 						Math.floor(Math.random() * 7),
 						Math.random() * canvas.width,
