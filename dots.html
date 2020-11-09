@@ -149,8 +149,8 @@
 						0.5 *
 						(distance -
 							2 *
-								radius *
-								forceDistances[forced.type][forcing.type]);
+							radius *
+							forceDistances[forced.type][forcing.type]);
 					force *=
 						forceMagnitudes[forced.type][forcing.type] *
 						forceMultiplyer;
@@ -162,8 +162,8 @@
 						-0.5 *
 						(distance -
 							10 *
-								radius *
-								forceDistances[forced.type][forcing.type]);
+							radius *
+							forceDistances[forced.type][forcing.type]);
 					force *=
 						forceMagnitudes[forced.type][forcing.type] *
 						forceMultiplyer;
@@ -211,11 +211,7 @@
 			function start() {
 				particles = [];
 
-				for (
-					let i = 0;
-					i < (canvas.width * canvas.height) / 2300;
-					i++
-				) {
+				for (let i = 0; i < (canvas.width * canvas.height) / 2300; i++) {
 					let particleBase = new Particle(
 						ctx,
 						Math.floor(Math.random() * 7),
