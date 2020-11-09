@@ -123,7 +123,7 @@
 			}
 
 			function updateMouse(event) {
-				let particleBase = new Particle(
+				const particleBase = new Particle(
 					ctx,
 					Math.floor(Math.random() * 6),
 					event.clientX,
@@ -134,7 +134,7 @@
 			}
 
 			function force(forced, forcing) {
-				let distance = Math.sqrt(
+				const distance = Math.sqrt(
 					(forced.x - forcing.x) ** 2 + (forced.y - forcing.y) ** 2
 				);
 				let force = 0;
@@ -149,8 +149,8 @@
 						0.5 *
 						(distance -
 							2 *
-								radius *
-								forceDistances[forced.type][forcing.type]);
+							radius *
+							forceDistances[forced.type][forcing.type]);
 					force *=
 						forceMagnitudes[forced.type][forcing.type] *
 						forceMultiplyer;
@@ -162,15 +162,15 @@
 						-0.5 *
 						(distance -
 							10 *
-								radius *
-								forceDistances[forced.type][forcing.type]);
+							radius *
+							forceDistances[forced.type][forcing.type]);
 					force *=
 						forceMagnitudes[forced.type][forcing.type] *
 						forceMultiplyer;
 				}
 
-				forced.velocityx += force * ((forced.x - forcing.x) / distance);
-				forced.velocityy += force * ((forced.y - forcing.y) / distance);
+				forced.velocityx += force * ((forced.x - forcing.x) / distance) || 0;
+				forced.velocityy += force * ((forced.y - forcing.y) / distance) || 0;
 			}
 
 			function loop() {
@@ -211,12 +211,8 @@
 			function start() {
 				particles = [];
 
-				for (
-					let i = 0;
-					i < (canvas.width * canvas.height) / 2300;
-					i++
-				) {
-					let particleBase = new Particle(
+				for (let i = 0; i < (canvas.width * canvas.height) / 2300; i++) {
+					const particleBase = new Particle(
 						ctx,
 						Math.floor(Math.random() * 7),
 						Math.random() * canvas.width,
