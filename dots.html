@@ -13,17 +13,24 @@
 	<body>
 		<canvas class="myCanvas" onclick="updateMouse(event)"></canvas>
 		<script>
-			let canvas = document.querySelector(".myCanvas");
-			let ctx = canvas.getContext("2d");
-			canvas.width = window.innerWidth;
-			canvas.height = window.innerHeight;
+			const canvas = document.querySelector(".myCanvas");
+			const ctx = canvas.getContext("2d");
 
-			let forceMultiplyer = 0.04;
-			let radius = 4;
-			let friction = 0.86;
+			function onWindowResize() {
+				canvas.width = window.innerWidth;
+				canvas.height = window.innerHeight;
+			}
+
+			onWindowResize();
+			window.addEventListener("resize", onWindowResize);
+
+			const forceMultiplyer = 0.04;
+			const radius = 4;
+			const friction = 0.86;
+			const forceMagnitudes = [[], [], [], [], [], [], []];
+			const forceDistances = [[], [], [], [], [], [], []];
+
 			let particles = [];
-			let forceMagnitudes = [[], [], [], [], [], [], []];
-			let forceDistances = [[], [], [], [], [], [], []];
 
 			for (let i = 0; i < 7; i++) {
 				for (let j = 0; j < 7; j++) {
@@ -32,10 +39,9 @@
 				}
 			}
 
-			class particle {
-				constructor(type, x, y) {
-					let canvas = document.querySelector(".myCanvas");
-					this.ctx = canvas.getContext("2d");
+			class Particle {
+				constructor(ctx, type, x, y) {
+					this.ctx = ctx;
 					this.type = type;
 					this.x = x;
 					this.y = y;
@@ -79,30 +85,30 @@
 					if (this.x < 2 * radius) {
 						this.velocityx +=
 							(this.x - radius) ** 2 * forceMultiplyer;
-					} else if (this.x > window.innerWidth - 2 * radius) {
+					} else if (this.x > canvas.width - 2 * radius) {
 						this.velocityx -=
-							(this.x - window.innerWidth - radius) ** 2 *
+							(this.x - canvas.width - radius) ** 2 *
 							forceMultiplyer;
 					}
 
 					if (this.y < 2 * radius) {
 						this.velocityy +=
 							(this.y - radius) ** 2 * forceMultiplyer;
-					} else if (this.y > window.innerHeight - 2 * radius) {
+					} else if (this.y > canvas.height - 2 * radius) {
 						this.velocityy -=
-							(this.y - window.innerHeight - radius) ** 2 *
+							(this.y - canvas.height - radius) ** 2 *
 							forceMultiplyer;
 					}
 
 					if (this.x < radius) {
 						this.velocityx = Math.abs(this.velocityx);
-					} else if (this.x > window.innerWidth - radius) {
+					} else if (this.x > canvas.width - radius) {
 						this.velocityx = Math.abs(this.velocityx) * -1;
 					}
 
 					if (this.y < radius) {
 						this.velocityy = Math.abs(this.velocityy);
-					} else if (this.y > window.innerHeight - radius) {
+					} else if (this.y > canvas.height - radius) {
 						this.velocityy = Math.abs(this.velocityy) * -1;
 					}
 				}
@@ -117,7 +123,8 @@
 			}
 
 			function updateMouse(event) {
-				let particleBase = new particle(
+				let particleBase = new Particle(
+					ctx,
 					Math.floor(Math.random() * 6),
 					event.clientX,
 					event.clientY
@@ -167,10 +174,9 @@
 			}
 
 			function loop() {
-				const context = canvas.getContext("2d");
-				context.clearRect(0, 0, canvas.width, canvas.height);
+				ctx.clearRect(0, 0, canvas.width, canvas.height);
 				ctx.fillStyle = "rgb(0, 0, 0)";
-				ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+				ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 				for (let i = 0; i < particles.length; i++) {
 					for (let j = 0; j < particles.length; j++) {
@@ -180,22 +186,38 @@
 					}
 				}
 
-				particles.forEach(function (element) {
+				let dotsGone = true;
+
+				particles.forEach((element) => {
 					element.move();
 					element.renderImage();
 					element.wallCheck();
+
+					if (
+						element.x <= canvas.width &&
+						element.y <= canvas.height
+					) {
+						dotsGone = false;
+					}
 				});
+
+				if (dotsGone) {
+					start();
+				}
 
 				requestAnimationFrame(loop);
 			}
 
 			function start() {
+				particles = [];
+
 				for (
 					let i = 0;
 					i < (canvas.width * canvas.height) / 2300;
 					i++
 				) {
-					let particleBase = new particle(
+					let particleBase = new Particle(
+						ctx,
 						Math.floor(Math.random() * 7),
 						Math.random() * canvas.width,
 						Math.random() * canvas.height
