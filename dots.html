@@ -169,8 +169,8 @@
 						forceMultiplyer;
 				}
 
-				forced.velocityx += force * ((forced.x - forcing.x) / distance);
-				forced.velocityy += force * ((forced.y - forcing.y) / distance);
+				forced.velocityx += force * ((forced.x - forcing.x) / distance) || 0;
+				forced.velocityy += force * ((forced.y - forcing.y) / distance) || 0;
 			}
 
 			function loop() {
