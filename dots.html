@@ -21,7 +21,7 @@
 				canvas.height = window.innerHeight;
 			}
 
-			onWindowResize();
+			setTimeout(onWindowResize, 0);
 			window.addEventListener("resize", onWindowResize);
 
 			const forceMultiplyer = 0.04;
@@ -149,8 +149,8 @@
 						0.5 *
 						(distance -
 							2 *
-							radius *
-							forceDistances[forced.type][forcing.type]);
+								radius *
+								forceDistances[forced.type][forcing.type]);
 					force *=
 						forceMagnitudes[forced.type][forcing.type] *
 						forceMultiplyer;
@@ -162,15 +162,17 @@
 						-0.5 *
 						(distance -
 							10 *
-							radius *
-							forceDistances[forced.type][forcing.type]);
+								radius *
+								forceDistances[forced.type][forcing.type]);
 					force *=
 						forceMagnitudes[forced.type][forcing.type] *
 						forceMultiplyer;
 				}
 
-				forced.velocityx += force * ((forced.x - forcing.x) / distance) || 0;
-				forced.velocityy += force * ((forced.y - forcing.y) / distance) || 0;
+				forced.velocityx +=
+					force * ((forced.x - forcing.x) / distance) || 0;
+				forced.velocityy +=
+					force * ((forced.y - forcing.y) / distance) || 0;
 			}
 
 			function loop() {
@@ -211,7 +213,11 @@
 			function start() {
 				particles = [];
 
-				for (let i = 0; i < (canvas.width * canvas.height) / 2300; i++) {
+				for (
+					let i = 0;
+					i < (canvas.width * canvas.height) / 2300;
+					i++
+				) {
 					const particleBase = new Particle(
 						ctx,
 						Math.floor(Math.random() * 7),
